@@ -119,7 +119,7 @@ Dengan begitu, saya dapat melihat `main` dengan perintah `python manage.py runse
 
 * ### Bagan request client ke web aplikasi berbasis Django
 
-![bagan request client ke web](/Users/bayuredyan/Downloads/IMG_2122.jpg)
+![bagan request client ke web](image/IMG_2122.jpg)
 
 Client (Browser/User) mengirimkan request HTTP ke server, yang kemudian memprosesnya dengan melakukan pemetaan URL melalui urls.py. Setelah URL ditemukan dan dipetakan, fungsi yang sesuai dalam views.py dijalankan berdasarkan permintaan URL tersebut. Selanjutnya, fungsi view mengembalikan HTTP response dalam bentuk halaman HTML. Dalam proses ini, views.py mengambil data yang dibutuhkan dari models.py, lalu data tersebut disajikan menggunakan template main.html.
 
