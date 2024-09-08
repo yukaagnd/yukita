@@ -8,6 +8,7 @@
 
 ## **Penjelasan Tugas**
 
+<details>
 <summary> <b> Tugas 2: Implementasi Model-View-Template (MVT) pada Django </b> </summary>
 
 ## **Implementasi Checklist**
@@ -114,3 +115,26 @@ urlpatterns = [
 
 Dengan begitu, saya dapat melihat `main` dengan perintah `python manage.py runserver`
 
+## **Jawaban Tugas 2**
+
+* ### Bagan request client ke web aplikasi berbasis Django
+
+![bagan request client ke web](/Users/bayuredyan/Downloads/IMG_2122.jpg)
+
+Client (Browser/User) mengirimkan request HTTP ke server, yang kemudian memprosesnya dengan melakukan pemetaan URL melalui urls.py. Setelah URL ditemukan dan dipetakan, fungsi yang sesuai dalam views.py dijalankan berdasarkan permintaan URL tersebut. Selanjutnya, fungsi view mengembalikan HTTP response dalam bentuk halaman HTML. Dalam proses ini, views.py mengambil data yang dibutuhkan dari models.py, lalu data tersebut disajikan menggunakan template main.html.
+
+
+* ### Fungsi `git` dalam pengembangan perangkat lunak
+
+Git adalah sistem pengontrol versi terdistribusi yang sangat penting dalam pengembangan perangkat lunak. Fungsinya mencakup pelacakan perubahan kode, memungkinkan kolaborasi antar-pengembang, dan mendukung pengelolaan proyek berskala besar. Dengan Git, pengembang dapat membuat cabang kode (branches) untuk mengembangkan fitur baru secara paralel tanpa mengganggu kode yang sudah ada. Setelah pengembangan selesai, perubahan dapat digabungkan (merge) kembali ke cabang utama. Selain itu, Git memungkinkan pengembalian (rollback) ke versi sebelumnya jika terjadi kesalahan.
+
+* ### Mengapa framework Django dijadikan permulaan pembelajaran pengembangan perangkat lunak?
+
+Django sering kali dipilih sebagai framework pertama untuk belajar pengembangan perangkat lunak karena struktur yang jelas dan fitur lengkapnya. Django menyediakan "batteries included," yang berarti banyak fungsi umum seperti autentikasi, manajemen database, dan URL routing sudah tersedia secara default, memudahkan pemula untuk fokus pada konsep dasar. Selain itu, Django menggunakan bahasa Python, yang terkenal dengan sintaks yang mudah dipahami,sehingga cocok untuk pelajar dan pengembang pemula.
+
+* ### Mengapa model pada Django disebut sebagai ORM?
+
+Pada Django, model disebut sebagai ORM (Object-Relational Mapping) karena menyediakan cara untuk menghubungkan dan memanipulasi data di database menggunakan objek Python. ORM memungkinkan pengembang berinteraksi dengan database tanpa harus menulis SQL secara langsung. Setiap model di Django merepresentasikan tabel di database, dan setiap atribut model merepresentasikan kolom pada tabel tersebut. Dengan menggunakan ORM, pengembang dapat melakukan operasi database seperti penyimpanan, pembaruan, dan penghapusan data dengan kode Python yang lebih mudah dibaca dan dipelihara.
+
+
+</details>
