@@ -60,10 +60,36 @@ Lalu saya mengimigrasikan model yang sudah saya buat dengan menjalankan perintah
 
 * ### Membuat template dan view aplikasi `main`
 
-Template pada file `html.main` berisi 
+Template untuk merender pada file `views.py` berisikan
+
+```
+from django.shortcuts import render
+
+def show_main(request):
+    context = {
+        'product_name': 'BLAHAJ Soft Toy',
+        'product_price': 'IDR 299,000',
+        'product_description': 'A large and soft cuddly shark. It\'s perfect to hug, use as a pillow, or play with. This toy will bring comfort and joy to any child.',
+        'product_quantity': 1,
+        'product_location': 'Jakarta, Surabaya, Bali',
+        'name' : "Gnade Yuka",
+        'kelas' : "PBP-B"
+    }
+
+    return render(request, "main.html", context)
+
+```
+
+dan template pada file `html.main` berisi 
 
 ```
 <h1>YuKita</h1>
+
+<h5>Nama: </h5>
+<p>{{ name }}</p>
+
+<h5>Kelas: </h5>
+<p>{{ kelas }}</p>
 
 <h1>{{ product_name }}</h1>
 
@@ -78,24 +104,6 @@ Template pada file `html.main` berisi
 
 <h5>Location: </h5>
 <p>{{ product_location }}</p>
-```
-
-dan template untuk merender pada file `views.py` berisikan
-
-```
-from django.shortcuts import render
-
-def show_main(request):
-    context = {
-        'product_name': 'BLAHAJ Soft Toy',
-        'product_price': 'IDR 299,000',
-        'product_description': 'A large and soft cuddly shark. It\'s perfect to hug, use as a pillow, or play with. This toy will bring comfort and joy to any child.',
-        'product_quantity': 1,
-        'product_location': 'Jakarta, Surabaya, Bali',
-    }
-
-    return render(request, "main.html", context)
-
 ```
 
 * ### Melakukanrouting pada aplikasi `main`
