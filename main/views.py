@@ -7,6 +7,8 @@ def show_main(request):
         'product_description': 'A large and soft cuddly shark. It\'s perfect to hug, use as a pillow, or play with. This toy will bring comfort and joy to any child.',
         'product_quantity': 1,
         'product_location': 'Jakarta, Surabaya, Bali',
+        'name' : "Gnade Yuka",
+        'kelas' : "PBP-B"
     }
 
     return render(request, "main.html", context)
