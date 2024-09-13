@@ -15,12 +15,11 @@ class mainTest(TestCase):
         response = Client().get('/skibidi/')
         self.assertEqual(response.status_code, 404)
 
-    def test_is_avaible(self):
+    def test_is_buy_wholesale(self):
         item = ShopEntry.objects.create(
-            name = "Adidas Samba",
-            price = 2200000,
-            description = "Lace up in legendary style. These adidas Samba LT shoes bring a retro sport vibe to your everyday style. Once an indoor football trainer, now a streetwear staple, this version makes a striking statement with an oversized football-inspired tongue. Crafted in premium leather with a sleek nubuck toe, they lend a sophisticated edge to everything from denim to joggers. A rubber outsole provides lightweight traction and classic good looks.",
+            name = "Yuka",
             quantity = 15,
             location = "Jakarta", 
+            note = "please use bubblewrap"
         )
-        self.assertTrue(item.is_avaible)
+        self.assertTrue(item.is_buy_wholesale)
