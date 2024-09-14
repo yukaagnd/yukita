@@ -146,3 +146,187 @@ Pada Django, model disebut sebagai ORM (Object-Relational Mapping) karena menyed
 
 
 </details>
+
+
+<details>
+<summary> <b> Tugas 2: Implementasi Model-View-Template (MVT) pada Django </b> </summary>
+
+## **Implementasi Checklist**
+
+* ### Membuat input form
+
+Membuat `form` untuk menerima input, sehingga nantinya data baru bisa ditampilkan dengan membuat file `forms.py` pada main yang berisikan kode
+
+```
+from django.forms import ModelForm
+from main.models import ShopEntry
+
+class ShopEntryForm(ModelForm):
+    class Meta:
+        model = ShopEntry 
+        fields = ["name", "quantity", "location", "note"]
+```
+
+Selain itu, saya juga mengubah `show_main` pada `views.py` menjadi
+
+```
+def show_main(request):
+    shop_entries = ShopEntry.objects.all()
+    
+    context = {
+        'product_name': 'Sofa Ruang Tamu',
+        'product_price': 'IDR 1,500,000',
+        'product_description': 'A sofa-bed with small, neat dimensions which is easy to furnish with, even when space is limited. You can make the sofa more comfortable and personal by completing with pillows in different colours and patterns.',
+        'stock': 1,
+        'product_location': 'Jakarta, Surabaya, Bali',
+        'name' : "Gnade Yuka",
+        'kelas' : "PBP-B",
+    }
+
+    return render(request, "main.html", context)
+```
+
+* ### Menambahkan fungsi pada `views.py`
+
+Sehingga kita bisa melihat data yang sudah diinput
+
+1. Membuat fungsi baru `create_shop_entry` pada `views.py` agar bisa menerima data yang berisikan
+
+```
+def create_shop_entry(request):
+    form = ShopEntryForm(request.POST or None)
+
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return redirect('main:show_main')
+
+    context = {'form': form}
+    return render(request, "create_shop_entry.html", context)
+```
+
+2. Lalu membuat template baru untuk tampilan ketika menambahkan pembelian baru dengan nama `create_shop_entry` pada direktori `main/templates` yang berisikan
+
+```
+{% extends 'base.html' %} 
+{% block content %}
+<h1>Add New Mood Entry</h1>
+
+<form method="POST">
+  {% csrf_token %}
+  <table>
+    {{ form.as_table }}
+    <tr>
+      <td></td>
+      <td>
+        <input type="submit" value="Add Shop Entry" />
+      </td>
+    </tr>
+  </table>
+</form>
+
+{% endblock %}
+```
+
+3. Lalu menampilkan data pembelian dalam bentuk tabel dan menambahkan tombol `Add New Shop Entry` pada `main.html` ketika ingin menambahkan pembelian
+
+```
+<div class="shop-entries">
+    <h3>Shop Entries</h3>
+    
+    {% if not shop_entries %}
+    <p>Belum ada pesanan yang masuk</p>
+    {% else %}
+    <table>
+      <tr>
+        <th>Name</th>
+        <th>Quantity</th>
+        <th>Location</th>
+        <th>Note</th>
+      </tr>
+      
+      <!-- Display each shop entry -->
+      {% for shop_entry in shop_entries %}
+      <tr>
+        <td>{{ shop_entry.name }}</td>
+        <td>{{ shop_entry.quantity }}</td>
+        <td>{{ shop_entry.location }}</td>
+        <td>{{ shop_entry.note }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    {% endif %}
+</div>
+
+<br />
+
+<a href="{% url 'main:create_shop_entry' %}">
+  <button>Add New Shop Entry</button>
+</a>
+```
+
+* ### Menambahkan format XML dan JSON 
+
+Untuk melihat data dalam format XML dan JSON, pada `views.py` di foler `main` kita menambahkan 
+```
+from django.http import HttpResponse
+from django.core import serializers
+```
+
+1. Menambahkan fungsi `show_xml` dan `show_xml_by_id` (untuk melihat bedasarkan filter ID) yang akan mengembalikan `HttpResponse` berisi data yang sudah menjadi XML
+
+```
+def show_xml(request):
+    data = ShopEntry.objects.all()
+    return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+
+def show_xml_by_id(request, id):
+    data = ShopEntry.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+```
+
+2. Menambahkan fungsi `show_json` dan `show_json_by_id` (untuk melihat bedasarkan filter ID) yang akan mengembalikan `HttpResponse` berisi data yang sudah menjadi JSON
+
+```
+def show_json(request):
+    data = ShopEntry.objects.all()
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+def show_json_by_id(request, id):
+    data = ShopEntry.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+
+```
+
+3. Merouting URL
+Tidak lupa juga untuk menambahkan `path_url` fungsi yang sudah kita tambhkan ke `urlpatterns` pada `main/urls.py` dan mengimport dari `views.py`. Sehingga isi dari `main/urls.py` akan berisi :
+
+```
+from django.urls import path
+from main.views import show_main, create_shop_entry, show_xml, show_json, show_xml_by_id, show_json_by_id
+
+app_name = 'main'
+
+urlpatterns = [
+    path('', show_main, name='show_main'),
+    path('create-shop-entry', create_shop_entry, name='create_shop_entry'),
+    path('xml/', show_xml, name='show_xml'),
+    path('json/', show_json, name='show_json'),
+    path('xml/<str:id>/', show_xml_by_id, name='show_xml_by_id'),
+    path('json/<str:id>/', show_json_by_id, name='show_json_by_id'),
+]
+```
+
+Sehingga, input `form` sudah bisa digunakan dengan menjalankan command `python3 manage.py runserver` dan mengunjungi <http://localhost:8000>.
+
+## Postman *Screenshot*
+1. XML
+![XML](image/postman_xml.png)
+2. JSON
+![JSON](image/postman_json.png)
+3. XML *by* ID
+![XML *by* ID](image/postman_xml_id.png)
+4. JSON *by* ID
+![JSON *by* ID](image/postman_json_id.png)
+
+</details>
+
