@@ -4,7 +4,7 @@
 
 > **YuKita** merupakan proyek Django sederhana berbentuk e-commerce berbasis website untuk memenuhi Tugas Individu mata kuliah PBP Gasal 2024/2025
 
-[Kunjungi Website YuKita](http://gnade-yuka-yukitadua.pbp.cs.ui.ac.id/)
+[Kunjungi Website YuKita](http://gnade-yuka-yukita.pbp.cs.ui.ac.id/)
 
 ## **Penjelasan Tugas**
 
