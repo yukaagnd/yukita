@@ -1,7 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<body>
-
+{% extends 'base.html' %}
+{% block content %}
 <header>
     <div>YuKita</div>
     <div>
@@ -11,25 +9,8 @@
 </header>
 
 <div class="container">
-    <h1>{{ product_name }}</h1>
-    
-    <div class="product-image">
-        <img src="https://d2xjmi1k71iy2m.cloudfront.net/dairyfarm/id/images/579/1057924_PE849077_S4.jpg" alt="Product Image">
-    </div>
-    
-    <h5>Price:</h5>
-    <p>{{ product_price }}</p>
-    
-    <h5>Description:</h5>
-    <p>{{ product_description }}</p>
-    
-    <h5>Quantity Available:</h5>
-    <p>{{ product_quantity }}</p>
-    
-    <h5>Location:</h5>
-    <p>{{ product_location }}</p>
-</div>
-
+  <h2>Cari Hunianmu</h2>
+  
 <!-- Shop Entry Section -->
 <div class="shop-entries">
     <h3>Shop Entries</h3>
@@ -39,19 +20,21 @@
     {% else %}
     <table>
       <tr>
-        <th>Name</th>
-        <th>Quantity</th>
-        <th>Location</th>
-        <th>Note</th>
+        <th>Nama</th>
+        <th>Harga</th>
+        <th>Jumlah Kamar</th>
+        <th>Lokasi</th>
+        <th>Deskripsi</th>
       </tr>
       
       <!-- Display each shop entry -->
       {% for shop_entry in shop_entries %}
       <tr>
-        <td>{{ shop_entry.name }}</td>
+        <td>{{ shop_entry.product_name }}</td>
+        <td>{{ shop_entry.price }}</td>
         <td>{{ shop_entry.quantity }}</td>
         <td>{{ shop_entry.location }}</td>
-        <td>{{ shop_entry.note }}</td>
+        <td>{{ shop_entry.description }}</td>
       </tr>
       {% endfor %}
     </table>
@@ -66,3 +49,4 @@
 
 </body>
 </html>
+{% endblock content %}

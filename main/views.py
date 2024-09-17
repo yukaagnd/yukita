@@ -8,11 +8,11 @@ def show_main(request):
     shop_entries = ShopEntry.objects.all()
     
     context = {
-        'product_name': 'Sofa Ruang Tamu',
-        'product_price': 'IDR 1,500,000',
-        'product_description': 'A sofa-bed with small, neat dimensions which is easy to furnish with, even when space is limited. You can make the sofa more comfortable and personal by completing with pillows in different colours and patterns.',
-        'stock': 1,
-        'product_location': 'Jakarta, Surabaya, Bali',
+        # 'product_name': 'Sofa Ruang Tamu',
+        # 'product_price': 'IDR 1,500,000',
+        # 'product_description': 'A sofa-bed with small, neat dimensions which is easy to furnish with, even when space is limited. You can make the sofa more comfortable and personal by completing with pillows in different colours and patterns.',
+        # 'stock': 1,
+        # 'product_location': 'Jakarta, Surabaya, Bali',
         'name' : "Gnade Yuka",
         'kelas' : "PBP-B",
         'shop_entries' : shop_entries
