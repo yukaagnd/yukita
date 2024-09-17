@@ -6,6 +6,7 @@ from django.core import serializers
 
 def show_main(request):
     shop_entries = ShopEntry.objects.all()
+    
     context = {
         'product_name': 'Sofa Ruang Tamu',
         'product_price': 'IDR 1,500,000',
