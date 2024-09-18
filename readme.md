@@ -4,7 +4,7 @@
 
 > **YuKita** merupakan proyek Django sederhana berbentuk e-commerce berbasis website untuk memenuhi Tugas Individu mata kuliah PBP Gasal 2024/2025
 
-[Kunjungi Website YuKita](http://gnade-yuka-yukita.pbp.cs.ui.ac.id/)
+[ 🏠 Kunjungi Website YuKita 🏠 ](http://gnade-yuka-yukita.pbp.cs.ui.ac.id/)
 
 ## **Penjelasan Tugas**
 
@@ -153,7 +153,7 @@ Pada Django, model disebut sebagai ORM (Object-Relational Mapping) karena menyed
 ## **Jawaban Tugas 3**
 
 * ### Mengapa kita memerlukan data delivery dalam pengimplementasian sebuah platform?
-**Data delivery** dalam pengimplementasian sebuah platform diperlukan karena bertujuan untuk memastikan bahwa data yang dikirim antar bagian sistem (misalnya, antara frontend dan backend atau antar microservices) dapat dipertukarkan dengan cara yang efisien, aman, dan konsisten. Tanpa mekanisme pengiriman data yang efektif, aplikasi tidak akan dapat menyajikan informasi yang tepat kepada pengguna secara real-time, menyebabkan pengalaman pengguna yang buruk. Selain itu, data delivery memungkinkan platform untuk beroperasi secara terdistribusi, mendukung skala besar, serta memfasilitasi komunikasi antar komponen yang berbeda secara seamless.
+**Data delivery** dalam pengimplementasian sebuah platform diperlukan karena bertujuan untuk memastikan bahwa data yang dikirim antar bagian sistem (misalnya, antara frontend dan backend atau antar microservices) dapat ditukar dengan cara yang efisien, aman, dan konsisten. Tanpa mekanisme pengiriman data yang efektif, aplikasi tidak akan dapat menyajikan informasi yang tepat kepada pengguna secara real-time, menyebabkan pengalaman pengguna yang buruk. Selain itu, data delivery memungkinkan platform untuk beroperasi secara terdistribusi, mendukung skala besar, serta memfasilitasi komunikasi antar komponen yang berbeda secara seamless.
 
 * ### Mana yang lebih baik antara XML dan JSON? Mengapa JSON lebih populer dibandingkan XML?
 Antara **XML** dan **JSON**, **JSON** lebih baik dan populer untuk pengiriman data dalam aplikasi modern. Hal ini karena JSON lebih ringan dan lebih mudah dibaca oleh manusia maupun mesin dibandingkan XML, yang menggunakan tag berlapis dan lebih verbose. JSON juga lebih mudah diolah dengan JavaScript, yang merupakan bahasa umum di web development. Sementara XML memiliki kemampuan untuk mendeskripsikan struktur data yang lebih kompleks (seperti metadata dan skema yang dapat divalidasi), JSON tetap lebih disukai untuk API modern karena kecepatan dan kesederhanaannya. Oleh karena itu, JSON lebih populer karena performanya yang lebih efisien dalam konteks pengiriman data di web.
@@ -177,7 +177,7 @@ from main.models import ShopEntry
 class ShopEntryForm(ModelForm):
     class Meta:
         model = ShopEntry 
-        fields = ["name", "quantity", "location", "note"]
+        fields = ["product_name", "price", "quantity", "location", "description"]
 ```
 
 Selain itu, saya juga mengubah `show_main` pada `views.py` menjadi
@@ -187,13 +187,14 @@ def show_main(request):
     shop_entries = ShopEntry.objects.all()
     
     context = {
-        'product_name': 'Sofa Ruang Tamu',
-        'product_price': 'IDR 1,500,000',
-        'product_description': 'A sofa-bed with small, neat dimensions which is easy to furnish with, even when space is limited. You can make the sofa more comfortable and personal by completing with pillows in different colours and patterns.',
-        'stock': 1,
-        'product_location': 'Jakarta, Surabaya, Bali',
+        # 'product_name': 'Sofa Ruang Tamu',
+        # 'product_price': 'IDR 1,500,000',
+        # 'product_description': 'A sofa-bed with small, neat dimensions which is easy to furnish with, even when space is limited. You can make the sofa more comfortable and personal by completing with pillows in different colours and patterns.',
+        # 'stock': 1,
+        # 'product_location': 'Jakarta, Surabaya, Bali',
         'name' : "Gnade Yuka",
         'kelas' : "PBP-B",
+        'shop_entries' : shop_entries
     }
 
     return render(request, "main.html", context)
@@ -251,19 +252,21 @@ def create_shop_entry(request):
     {% else %}
     <table>
       <tr>
-        <th>Name</th>
-        <th>Quantity</th>
-        <th>Location</th>
-        <th>Note</th>
+        <th>Nama</th>
+        <th>Harga</th>
+        <th>Jumlah Kamar</th>
+        <th>Lokasi</th>
+        <th>Deskripsi</th>
       </tr>
       
       <!-- Display each shop entry -->
       {% for shop_entry in shop_entries %}
       <tr>
-        <td>{{ shop_entry.name }}</td>
+        <td>{{ shop_entry.product_name }}</td>
+        <td>{{ shop_entry.price }}</td>
         <td>{{ shop_entry.quantity }}</td>
         <td>{{ shop_entry.location }}</td>
-        <td>{{ shop_entry.note }}</td>
+        <td>{{ shop_entry.description }}</td>
       </tr>
       {% endfor %}
     </table>
