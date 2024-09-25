@@ -42,7 +42,7 @@ def create_shop_entry(request):
         return redirect('main:show_main')
 
     context = {'form': form}
-    return render(request, "create_mood_entry.html", context)
+    return render(request, "create_shop_entry.html", context)
 
 def show_xml(request):
     data = ShopEntry.objects.all()
