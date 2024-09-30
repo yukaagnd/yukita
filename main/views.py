@@ -1,5 +1,5 @@
 import datetime
-from django.shortcuts import render, redirect   # Tambahkan import redirect di baris ini
+from django.shortcuts import render, redirect, reverse
 from main.forms import ShopEntryForm
 from main.models import ShopEntry
 from django.http import HttpResponse
@@ -27,7 +27,7 @@ def show_main(request):
         # 'name' : "Gnade Yuka",
         'kelas' : "PBP-B",
         'shop_entries' : shop_entries,
-        'last_login': request.COOKIES['last_login']
+        'last_login': request.COOKIES.get('last_login', 'Not available'),
     }
 
     return render(request, "main.html", context)
@@ -93,3 +93,23 @@ def logout_user(request):
     response = HttpResponseRedirect(reverse('main:login'))
     response.delete_cookie('last_login')
     return response
+
+def edit_shop(request, id):
+    shop = ShopEntry.objects.get(pk = id)
+
+    form = ShopEntryForm(request.POST or None, instance=shop)
+
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+
+    context = {'form': form}
+    return render(request, "edit_shop.html", context)
+
+def delete_shop(request, id):
+    # Get mood berdasarkan id
+    shop = ShopEntry.objects.get(pk = id)
+    # Hapus mood
+    shop.delete()
+    # Kembali ke halaman awal
+    return HttpResponseRedirect(reverse('main:show_main'))
