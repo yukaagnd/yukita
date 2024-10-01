@@ -566,3 +566,31 @@ Pada `main.html` tambahkan potongan kode untuk menampilkan data last login.
 ```
 </details>
 
+<details>
+<summary> <b> Tugas 5: Desain Web menggunakan HTML, CSS dan Framework CSS</b> </summary>
+
+## **Jawaban Tugas 5**
+
+* ### Jika terdapat beberapa CSS selector untuk suatu elemen HTML, jelaskan urutan prioritas pengambilan CSS selector tersebut!
+
+CSS menentukan prioritas selector berdasarkan konsep specificity. Selector dengan prioritas tertinggi diterapkan jika ada beberapa selector yang berlaku untuk elemen yang sama. Urutannya dimulai dari yang terendah: selector elemen (tag), selector class, selector ID, inline styles, dan yang tertinggi adalah aturan dengan `!important`. Inline styles dan `!important` dapat mengesampingkan prioritas selector lainnya.
+
+* ### Mengapa responsive design menjadi konsep yang penting dalam pengembangan aplikasi web? Berikan contoh aplikasi yang sudah dan belum menerapkan responsive design!
+
+Responsive design penting agar tampilan situs web dapat beradaptasi dengan baik di berbagai perangkat dengan ukuran layar yang berbeda, seperti desktop, tablet, dan ponsel. Hal ini meningkatkan pengalaman pengguna dan memastikan situs tetap mudah diakses dan fungsional. Misalnya, aplikasi seperti Google telah menerapkan responsive design, sementara beberapa situs lama mungkin belum responsif dan tampil berantakan di perangkat seluler.
+
+* ### Jelaskan perbedaan antara margin, border, dan padding, serta cara untuk mengimplementasikan ketiga hal tersebut!
+
+Margin adalah ruang luar elemen, yang mengatur jarak antara elemen dengan elemen lainnya. Border adalah garis yang mengelilingi konten dan padding elemen. Padding adalah ruang dalam yang memberi jarak antara konten elemen dan border. Ketiga konsep ini mengontrol ruang dan tampilan tata letak elemen pada halaman web dan dapat diatur melalui properti CSS seperti margin, border, dan padding.
+
+* ### Jelaskan konsep flex box dan grid layout beserta kegunaannya!
+
+Flexbox adalah metode tata letak CSS yang digunakan untuk mendistribusikan elemen dalam satu dimensi (baris atau kolom) dengan fleksibel, membuat elemen lebih responsif dan mudah diatur. Grid layout, di sisi lain, adalah sistem dua dimensi yang memungkinkan pengaturan elemen dalam baris dan kolom secara simultan, memberikan kontrol yang lebih besar atas tata letak yang kompleks. Keduanya mempermudah pembuatan layout yang dinamis dan adaptif.
+
+
+## **Implementasi Checklist**
+
+
+
+
+</details>

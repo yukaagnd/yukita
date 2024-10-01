@@ -1,32 +1,48 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block meta %}
 <title>Login</title>
 {% endblock meta %}
 
 {% block content %}
-<div class="login">
-  <h1>Login</h1>
+<!-- Flex container to align items horizontally -->
+<div class="min-h-screen flex items-center justify-between w-screen bg-[#F6F4F1] py-12 px-4 sm:px-6 lg:px-8">
+  
+  <!-- Left Section with Text -->
+  <div class="flex-1 max-w-md text-left">
+    <h2 class="text-5xl font-extrabold text-black">
+      Login to <span class="text-[#968864]">YuKita</span>
+    </h2>
+    <p class="mt-4 text-sm text-black">If you don't have an account you can <a href="{% url 'main:register' %}" class="font-medium text-[#7b81ec] hover:underline">Register here!</a></p>
+  </div>
+  
+  <!-- Middle Section with Image -->
+  <div class="flex-1 flex justify-center mx-4">
+    <img src="{% static 'image/login.png' %}" alt="Login Illustration" class="w-full max-w-sm">
+  </div>
+  
+  <!-- Right Section with Form -->
+  <div class="flex-1 max-w-sm w-full">
+    <form class="mt-8 space-y-6" method="POST" action="">
+      {% csrf_token %}
+      <div class="rounded-md shadow-sm space-y-4">
+        <div>
+          <label for="username" class="sr-only">Username</label>
+          <input id="username" name="username" type="text" required class="appearance-none block w-full px-3 py-2 border border-[#968864] text-[#2e2e2e] rounded-md focus:outline-none focus:ring-[#7b81ec] focus:border-[#7b81ec] sm:text-sm" placeholder="Username">
+        </div>
+        <div>
+          <label for="password" class="sr-only">Password</label>
+          <input id="password" name="password" type="password" required class="appearance-none block w-full px-3 py-2 border border-[#968864] text-[#2e2e2e] rounded-md focus:outline-none focus:ring-[#7b81ec] focus:border-[#7b81ec] sm:text-sm" placeholder="Password">
+        </div>
+      </div>
 
-  <form method="POST" action="">
-    {% csrf_token %}
-    <table>
-      {{ form.as_table }}
-      <tr>
-        <td></td>
-        <td><input class="btn login_btn" type="submit" value="Login" /></td>
-      </tr>
-    </table>
-  </form>
-
-  {% if messages %}
-  <ul>
-    {% for message in messages %}
-    <li>{{ message }}</li>
-    {% endfor %}
-  </ul>
-  {% endif %} Don't have an account yet?
-  <a href="{% url 'main:register' %}">Register Now</a>
+      <div>
+        <button type="submit" class="w-full py-2 px-4 text-sm font-medium rounded-md text-white bg-[#7b81ec] hover:bg-[#5d64dc] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#7b81ec]">
+          Login
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
-
 {% endblock content %}

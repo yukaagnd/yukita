@@ -1,0 +1,42 @@
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <!-- Start of a Card -->
+    {% for shop_entry in shop_entries %}
+    <div class="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 relative">
+      
+      <!-- Product Image -->
+      <div class="relative">
+        <img src="{{ shop_entry.image_url }}" alt="{{ shop_entry.product_name }}" class="w-full h-56 object-cover">
+        <div class="absolute top-0 left-0 p-2 bg-[#968864] text-white font-semibold text-xs rounded-br-md">Featured</div>
+      </div>
+  
+      <!-- Product Information -->
+      <div class="p-4">
+        <!-- Product Name -->
+        <h2 class="text-lg font-bold text-gray-800">{{ shop_entry.product_name }}</h2>
+        
+        <!-- Price -->
+        <p class="text-[#968864] text-lg font-semibold">{{ shop_entry.price | floatformat:2 }} / night</p>
+        
+        <!-- Location -->
+        <p class="text-gray-500 text-sm">{{ shop_entry.location }}</p>
+        
+        <!-- Description -->
+        <p class="text-gray-600 text-sm mt-2">{{ shop_entry.description }}</p>
+      </div>
+  
+      <!-- Rating and Distance -->
+      <div class="p-4 border-t border-gray-200 flex justify-between items-center text-sm text-gray-500">
+        <span>⭐ {{ shop_entry.rating | floatformat:2 }}</span>
+        <span>{{ shop_entry.distance }} km away</span>
+      </div>
+      
+      <!-- Dates and Availability -->
+      <div class="p-4 bg-[#F6F4F1] border-t border-gray-200 flex justify-between items-center text-sm text-gray-500">
+        <span>{{ shop_entry.dates }}</span>
+      </div>
+  
+    </div>
+    {% endfor %}
+    <!-- End of a Card -->
+  </div>
+  

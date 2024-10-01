@@ -1,72 +1,67 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>YuKita</title>
+{% endblock meta %}
 {% block content %}
-<header>
-    <div>YuKita</div>
-    <div>
-        Nama: {{ name }}<br>
-        Kelas: {{ kelas }}
+{% include 'navbar.html' %}
+<div class="overflow-x-hidden px-4 md:px-8 pb-8 pt-24 min-h-screen bg-[#F6F4F1] flex flex-col">
+  <div class="flex justify-center">
+    <div class="w-full max-w-sm p-6 bg-[#968864] text-white rounded-lg shadow-lg">
+        <h3 class="text-2xl font-bold text-center">Name</h3>
+        <p class="text-lg text-center">{{ name }}</p>
     </div>
-</header>
-
-<div class="container">
-  <h2>Cari Hunianmu</h2>
-  
-<!-- Shop Entry Section -->
-<div class="shop-entries">
-    <h3>Shop Entries</h3>
+  </div>
     
-    {% if not shop_entries %}
-    <p>Belum ada pesanan yang masuk</p>
-    {% else %}
-    <table>
-      <tr>
-        <th>Nama</th>
-        <th>Harga</th>
-        <th>Jumlah Kamar</th>
-        <th>Lokasi</th>
-        <th>Deskripsi</th>
-      </tr>
+    <!-- Sesi terakhir login -->
+    <div class="flex justify-center mt-4">
+      <p class="text-center text-black text-sm font-poppins">
+        Sesi terakhir login: {{ last_login }}
+      </p>
+    </div>
+
+  <div class="flex justify-end mb-6">
+    <a href="{% url 'main:create_shop_entry' %}" class="bg-[#968864] hover:bg-[#7d7453] text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
+      Add New Product
+    </a>
+  </div>
+  
+  {% if not shop_entries %}
+  <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+    <img src="{% static 'image/sedih-banget.jpeg' %}" alt="Sad face" class="w-42 h-32 mb-4"/>
+    <p class="text-center text-gray-600 mt-4">Belum ada data shop pada YuKita.</p>
+  </div>
+  {% else %}
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 space-y-6 w-full">
+    {% for shop_entry in shop_entries %}
+    <div class="border rounded-lg overflow-hidden shadow-lg p-4 relative">
+      <!-- Image with room count -->
+      <div class="relative">
+        <img src="{% static 'image/rumah.jpeg.webp' %}" alt="{{ shop_entry.product_name }}" class="w-full h-48 object-cover mb-4"/>
+        <!-- Room count (Jumlah Kamar) in the top-right corner -->
+        <span class="absolute top-2 right-2 bg-[#968864] text-white text-sm py-1 px-2 rounded-md">
+          {{ shop_entry.quantity }} Rooms
+        </span>
+      </div>
+
+      <!-- Shop information -->
+      <h3 class="text-lg font-bold mb-2">{{ shop_entry.product_name }}</h3>
+      <p class="text-gray-600">{{ shop_entry.location }}</p>
+      <p class="text-gray-500">{{ shop_entry.description }}</p>
+      <p class="font-bold text-lg text-[#968864]">Rp{{ shop_entry.price }} / night</p>
       
-      <!-- Display each shop entry -->
-      {% for shop_entry in shop_entries %}
-      <tr>
-        <td>{{ shop_entry.product_name }}</td>
-        <td>{{ shop_entry.price }}</td>
-        <td>{{ shop_entry.quantity }}</td>
-        <td>{{ shop_entry.location }}</td>
-        <td>{{ shop_entry.description }}</td>
-        <td>
-          <a href="{% url 'main:edit_shop' shop_entry.pk %}">
-              <button>
-                  Edit
-              </button>
-          </a>
-        </td>
-        <td>
-          <a href="{% url 'main:delete_shop' shop_entry.pk %}">
-              <button>
-                  Delete
-              </button>
-          </a>
-        </td>
-      </tr>
-      {% endfor %}
-    </table>
-    {% endif %}
+      <div class="flex justify-between mt-4">
+        <a href="{% url 'main:edit_shop' shop_entry.pk %}" class="text-white bg-blue-500 hover:bg-blue-600 py-1 px-3 rounded">
+          Edit
+        </a>
+        <a href="{% url 'main:delete_shop' shop_entry.pk %}" class="text-white bg-red-500 hover:bg-red-600 py-1 px-3 rounded">
+          Delete
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
 </div>
-
-<br />
-
-<a href="{% url 'main:create_shop_entry' %}">
-  <button>Add New Shop Entry</button>
-</a>
-
-<a href="{% url 'main:logout' %}">
-  <button>Logout</button>
-</a>
-
-<h5>Sesi terakhir login: {{ last_login }}</h5>
-
-</body>
-</html>
 {% endblock content %}
