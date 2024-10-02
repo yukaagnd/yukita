@@ -590,7 +590,602 @@ Flexbox adalah metode tata letak CSS yang digunakan untuk mendistribusikan eleme
 
 ## **Implementasi Checklist**
 
+* ### Menambahksn Tailwind ke Aplikasi
+
+Pada `templates/base.html` kita sambungkan template django dengan tailwind dengan menambahkan 
+
+```
+<head>
+{% block meta %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+{% endblock meta %}
+<script src="https://cdn.tailwindcss.com">
+</script>
+</head>
+```
+
+* ### Menambahkan fitur Edit dan Hapus Item
+
+pada `views.py` kita membuat fungsi baru bernama `edit_shop` dan `delete_shop` seperti berikut 
+
+```
+from django.shortcuts import .., reverse
+from django.http import .., HttpResponseRedirect
 
 
+def edit_shop(request, id):
+    shop = ShopEntry.objects.get(pk = id)
 
+    form = ShopEntryForm(request.POST or None, instance=shop)
+
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+
+    context = {'form': form}
+    return render(request, "edit_shop.html", context)
+
+def delete_shop(request, id):
+    # Get mood berdasarkan id
+    shop = ShopEntry.objects.get(pk = id)
+    # Hapus mood
+    shop.delete()
+    # Kembali ke halaman awal
+    return HttpResponseRedirect(reverse('main:show_main'))
+```
+
+Untuk membuat tampilannnya saya membuat `edit_shop.html` pada `main/templates` yang berisi
+
+```
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<h1>Edit Shop</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" value="Edit Item"/>
+            </td>
+        </tr>
+    </table>
+</form>
+
+{% endblock %}
+```
+
+Tidak lupa untuk mengimport fungsi `edit_shop` dan `delete_shop` pada `urls.py`
+
+```
+from main.views import edit_shop
+from main.views import delete_mood
+...
+    path('edit-shop/<uuid:id>', edit_shop name='edit_shop),
+    path('delete/<uuid:id>', delete_mood, name='delete_mood'), # sesuaikan dengan nama fungsi yang dibuat
+...
+```
+
+Terakhir pada `main.html` kita buat agar terlihat tombol edit dan delete pada setiap item
+```
+...
+<tr>
+    ...
+    <td>
+        <a href="{% url 'main:edit_mood' mood_entry.pk %}">
+            <button>
+                Edit
+            </button>
+        </a>
+    </td>
+    <td>
+        <a href="{% url 'main:delete_mood' mood_entry.pk %}">
+            <button>
+                Delete
+            </button>
+        </a>
+    </td>
+</tr>
+...
+```
+
+* ### Menambahkan Navigation Bar pada Aplikasi
+
+Saya membuat berkas HTML baru dengan nama navbar.html pada folder `templates/` di root directory. Isi dari navbar.html dapat kamu isi dengan template berikut.
+
+```
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+      body {
+        background-color: #F6F4F1;
+        font-family: 'Poppins', sans-serif;
+      }
+  
+      .brand {
+        font-size: 2xl;
+        font-weight: bold;
+      }
+  
+      .brand .yuk {
+        color: #000000;
+        font-size: 36px;
+      }
+  
+      .brand .ita {
+        color: #968864;
+        font-size: 36px;
+      }
+  
+      .welcome {
+        color: #424241;
+      }
+  
+      .logout-btn {
+        background-color: #968864;
+        color: white;
+        font-weight: bold;
+      }
+  
+      .logout-btn:hover {
+        background-color: #7d7453;
+      }
+  
+      .menu-item {
+        margin-right: 16px;
+        color: #424241;
+        font-weight: 600;
+      }
+  
+      .menu-item:hover {
+        color: #968864;
+      }
+    </style>
+  </head>
+  
+  <nav class="bg-F6F4F1 shadow-lg fixed top-0 left-0 z-40 w-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center">
+          <h1 class="brand">
+            <span class="yuk">Yu</span><span class="ita">Kita</span>
+          </h1>
+        </div>
+  
+        <!-- Navigation Menu -->
+        <div class="hidden md:flex items-center space-x-6">
+          <a href="{% url 'main:show_main' %}" class="menu-item">Home</a>
+          <a href="{% url 'main:show_main' %}" class="menu-item">Sewa</a>
+          <a href="{% url 'main:show_main' %}" class="menu-item">Wishlist</a>
+          <a href="{% url 'main:show_main' %}" class="menu-item">Kerjasama</a>
+        </div>
+  
+        <div class="hidden md:flex items-center">
+          {% if user.is_authenticated %}
+            <span class="welcome mr-4">Welcome, {{ user.username }}</span>
+            <a href="{% url 'main:logout' %}" class="logout-btn text-center py-2 px-4 rounded transition duration-300">
+              Logout
+            </a>
+          {% else %}
+            <a href="{% url 'main:login' %}" class="text-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300 mr-2">
+              Login
+            </a>
+            <a href="{% url 'main:register' %}" class="text-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300">
+              Register
+            </a>
+          {% endif %}
+        </div>
+  
+        <div class="md:hidden flex items-center">
+          <button class="mobile-menu-button">
+            <svg class="w-6 h-6 text-white" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
+              <path d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Mobile menu -->
+    <div class="mobile-menu hidden md:hidden px-4 w-full md:max-w-full">
+      <div class="pt-2 pb-3 space-y-1 mx-auto">
+        <a href="{% url 'main:show_main' %}" class="block menu-item">Home</a>
+        <a href="{% url 'main:show_main' %}" class="block menu-item">Sewa</a>
+        <a href="{% url 'main:show_main' %}" class="block menu-item">Wishlist</a>
+        <a href="{% url 'main:show_main' %}" class="block menu-item">Kerjasama</a>
+  
+        {% if user.is_authenticated %}
+          <span class="welcome block px-3 py-2">Welcome, {{ user.username }}</span>
+          <a href="{% url 'main:logout' %}" class="logout-btn block text-center py-2 px-4 rounded transition duration-300">
+            Logout
+          </a>
+        {% else %}
+          <a href="{% url 'main:login' %}" class="block text-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300 mb-2">
+            Login
+          </a>
+          <a href="{% url 'main:register' %}" class="block text-center bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300">
+            Register
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  
+    <script>
+      const btn = document.querySelector("button.mobile-menu-button");
+      const menu = document.querySelector(".mobile-menu");
+  
+      btn.addEventListener("click", () => {
+        menu.classList.toggle("hidden");
+      });
+    </script>
+  </nav>
+  
+```
+
+Lalu kita tautkan navbar pada main.html, create_shop_entry.html, dan edit_shop.html yang berada di subdirektori main/templates/
+
+```
+{% extends 'base.html' %}
+{% block content %}
+{% include 'navbar.html' %}
+...
+{% endblock content%}
+```
+* ### Menghubungan global.css dan script Tailwind ke base.html
+
+Agar style CSS yang ditambahkan di global.css dapat digunakan dalam template Django, kita memodiifikasi `base.html`
+
+```
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% block meta %} {% endblock meta %}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'css/global.css' %}"/>
+  </head>
+  <body>
+    {% block content %} {% endblock content %}
+  </body>
+</html>
+```
+
+dan memodifikasi `global.css` pada `static/css/global.css`
+
+```
+.form-style form input, form textarea, form select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 2px solid #bcbcbc;
+    border-radius: 0.375rem;
+}
+.form-style form input:focus, form textarea:focus, form select:focus {
+    outline: none;
+    border-color: #674ea7;
+    box-shadow: 0 0 0 3px #674ea7;
+}
+@keyframes shine {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+.animate-shine {
+    background: linear-gradient(120deg, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.3));
+    background-size: 200% 100%;
+    animation: shine 3s infinite;
+}
+```
+
+* ### Styling Halaman Login
+
+```
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Login</title>
+{% endblock meta %}
+
+{% block content %}
+<!-- Flex container to align items horizontally -->
+<div class="min-h-screen flex items-center justify-between w-screen bg-[#F6F4F1] py-12 px-4 sm:px-6 lg:px-8">
+  
+  <!-- Left Section with Text -->
+  <div class="flex-1 max-w-md text-left">
+    <h2 class="text-5xl font-extrabold text-black">
+      Login to <span class="text-[#968864]">YuKita</span>
+    </h2>
+    <p class="mt-4 text-sm text-black">If you don't have an account you can <a href="{% url 'main:register' %}" class="font-medium text-[#7b81ec] hover:underline">Register here!</a></p>
+  </div>
+  
+  <!-- Middle Section with Image -->
+  <div class="flex-1 flex justify-center mx-4">
+    <img src="{% static 'image/login.png' %}" alt="Login Illustration" class="w-full max-w-sm">
+  </div>
+  
+  <!-- Right Section with Form -->
+  <div class="flex-1 max-w-sm w-full">
+    <form class="mt-8 space-y-6" method="POST" action="">
+      {% csrf_token %}
+      <div class="rounded-md shadow-sm space-y-4">
+        <div>
+          <label for="username" class="sr-only">Username</label>
+          <input id="username" name="username" type="text" required class="appearance-none block w-full px-3 py-2 border border-[#968864] text-[#2e2e2e] rounded-md focus:outline-none focus:ring-[#7b81ec] focus:border-[#7b81ec] sm:text-sm" placeholder="Username">
+        </div>
+        <div>
+          <label for="password" class="sr-only">Password</label>
+          <input id="password" name="password" type="password" required class="appearance-none block w-full px-3 py-2 border border-[#968864] text-[#2e2e2e] rounded-md focus:outline-none focus:ring-[#7b81ec] focus:border-[#7b81ec] sm:text-sm" placeholder="Password">
+        </div>
+      </div>
+
+      <div>
+        <button type="submit" class="w-full py-2 px-4 text-sm font-medium rounded-md text-white bg-[#7b81ec] hover:bg-[#5d64dc] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#7b81ec]">
+          Login
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock content %}
+
+```
+* ### Styling Halaman Register
+
+```
+{% extends 'base.html' %}
+{% load static %} 
+
+{% block meta %}
+<title>Register</title>
+{% endblock meta %}
+
+{% block content %}
+<!-- Flex container with background color -->
+<div class="min-h-screen flex items-center justify-center bg-[#F6F4F1] py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8 form-style">
+    <!-- Image at the top -->
+    <div class="flex justify-center">
+      <img src="{% static 'image/login.png' %}" alt="Register Illustration" class="w-32 h-32">
+    </div>
+
+    <div>
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-[#968864]">
+        Create your account
+      </h2>
+    </div>
+    
+    <!-- Form Section -->
+    <form class="mt-8 space-y-6" method="POST">
+      {% csrf_token %}
+      <input type="hidden" name="remember" value="true">
+      <div class="rounded-md shadow-sm -space-y-px">
+        {% for field in form %}
+          <div class="{% if not forloop.first %}mt-4{% endif %}">
+            <label for="{{ field.id_for_label }}" class="mb-2 font-semibold text-[#968864]">
+              {{ field.label }}
+            </label>
+            <div class="relative">
+              {{ field }}
+              <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                {% if field.errors %}
+                  <svg class="h-5 w-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                  </svg>
+                {% endif %}
+              </div>
+            </div>
+            {% if field.errors %}
+              {% for error in field.errors %}
+                <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+              {% endfor %}
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Submit Button -->
+      <div>
+        <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-[#7d7453] hover:bg-[#5d5c48] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#7d7453]">
+          Register
+        </button>
+      </div>
+    </form>
+
+    <!-- Error Messages -->
+    {% if messages %}
+    <div class="mt-4">
+      {% for message in messages %}
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <span class="block sm:inline">{{ message }}</span>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Login Link -->
+    <div class="text-center mt-4">
+      <p class="text-sm text-[#968864]">
+        Already have an account?
+        <a href="{% url 'main:login' %}" class="font-medium text-[#7b81ec] hover:text-[#5d64dc]">
+          Login here
+        </a>
+      </p>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+```
+
+* ### Styling Halaman Home
+
+```
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>YuKita</title>
+{% endblock meta %}
+{% block content %}
+{% include 'navbar.html' %}
+<div class="overflow-x-hidden px-4 md:px-8 pb-8 pt-24 min-h-screen bg-[#F6F4F1] flex flex-col">
+  <div class="flex justify-center">
+    <div class="w-full max-w-sm p-6 bg-[#968864] text-white rounded-lg shadow-lg">
+        <h3 class="text-2xl font-bold text-center">Name</h3>
+        <p class="text-lg text-center">{{ name }}</p>
+    </div>
+  </div>
+    
+    <!-- Sesi terakhir login -->
+    <div class="flex justify-center mt-4">
+      <p class="text-center text-black text-sm font-poppins">
+        Sesi terakhir login: {{ last_login }}
+      </p>
+    </div>
+
+  <div class="flex justify-end mb-6">
+    <a href="{% url 'main:create_shop_entry' %}" class="bg-[#968864] hover:bg-[#7d7453] text-white font-bold py-2 px-4 rounded-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
+      Add New Product
+    </a>
+  </div>
+  
+  {% if not shop_entries %}
+  <div class="flex flex-col items-center justify-center min-h-[24rem] p-6">
+    <img src="{% static 'image/sedih-banget.jpeg' %}" alt="Sad face" class="w-42 h-32 mb-4"/>
+    <p class="text-center text-gray-600 mt-4">Belum ada data shop pada YuKita.</p>
+  </div>
+  {% else %}
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 space-y-6 w-full">
+    {% for shop_entry in shop_entries %}
+    <div class="border rounded-lg overflow-hidden shadow-lg p-4 relative">
+      <!-- Image with room count -->
+      <div class="relative">
+        <img src="{% static 'image/rumah.jpeg.webp' %}" alt="{{ shop_entry.product_name }}" class="w-full h-48 object-cover mb-4"/>
+        <!-- Room count (Jumlah Kamar) in the top-right corner -->
+        <span class="absolute top-2 right-2 bg-[#968864] text-white text-sm py-1 px-2 rounded-md">
+          {{ shop_entry.quantity }} Rooms
+        </span>
+      </div>
+
+      <!-- Shop information -->
+      <h3 class="text-lg font-bold mb-2">{{ shop_entry.product_name }}</h3>
+      <p class="text-gray-600">{{ shop_entry.location }}</p>
+      <p class="text-gray-500">{{ shop_entry.description }}</p>
+      <p class="font-bold text-lg text-[#968864]">Rp{{ shop_entry.price }} / night</p>
+      
+      <div class="flex justify-between mt-4">
+        <a href="{% url 'main:edit_shop' shop_entry.pk %}" class="text-white bg-blue-500 hover:bg-blue-600 py-1 px-3 rounded">
+          Edit
+        </a>
+        <a href="{% url 'main:delete_shop' shop_entry.pk %}" class="text-white bg-red-500 hover:bg-red-600 py-1 px-3 rounded">
+          Delete
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+{% endblock content %}
+
+```
+
+* ### Styling Halaman Shop Entry
+```
+{% extends 'base.html' %}
+{% load static %}
+{% block meta %}
+<title>Edit Room</title>
+{% endblock meta %}
+
+{% block content %}
+{% include 'navbar.html' %}
+<div class="flex flex-col min-h-screen bg-[#F6F4F1] pt-24">
+  <div class="container mx-auto px-4 py-8 max-w-xl">
+    <h1 class="text-3xl font-bold text-center mb-8 text-black">Edit Room Entry</h1>
+  
+    <div class="bg-white rounded-lg p-6 form-style">
+      <form method="POST" class="space-y-6">
+          {% csrf_token %}
+          {% for field in form %}
+              <div class="flex flex-col">
+                  <label for="{{ field.id_for_label }}" class="mb-2 font-semibold text-gray-700">
+                      {{ field.label }}
+                  </label>
+                  <div class="w-full">
+                      {{ field }}
+                  </div>
+                  {% if field.help_text %}
+                      <p class="mt-1 text-sm text-gray-500">{{ field.help_text }}</p>
+                  {% endif %}
+                  {% for error in field.errors %}
+                      <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+                  {% endfor %}
+              </div>
+          {% endfor %}
+          <div class="flex justify-center mt-6">
+              <button type="submit" class="bg-[#968864] text-white font-semibold px-6 py-3 rounded-lg hover:bg-[#7d7453] transition duration-300 ease-in-out w-full">
+                  Edit Shop Entry
+              </button>
+          </div>
+      </form>
+  </div>
+  </div>
+</div>
+{% endblock %}
+
+```
+* ### Styling Halaman edit Shop Entry
+
+```
+{% extends 'base.html' %}
+{% load static %}
+{% block meta %}
+<title>Edit Room</title>
+{% endblock meta %}
+
+{% block content %}
+{% include 'navbar.html' %}
+<div class="flex flex-col min-h-screen bg-[#F6F4F1] pt-24">
+  <div class="container mx-auto px-4 py-8 mt-16 max-w-xl">
+    <h1 class="text-3xl font-bold text-center mb-8 text-black">Edit Room Entry</h1>
+  
+    <div class="bg-white rounded-lg p-6 form-style">
+      <form method="POST" class="space-y-6">
+          {% csrf_token %}
+          {% for field in form %}
+              <div class="flex flex-col">
+                  <label for="{{ field.id_for_label }}" class="mb-2 font-semibold text-gray-700">
+                      {{ field.label }}
+                  </label>
+                  <div class="w-full">
+                      {{ field }}
+                  </div>
+                  {% if field.help_text %}
+                      <p class="mt-1 text-sm text-gray-500">{{ field.help_text }}</p>
+                  {% endif %}
+                  {% for error in field.errors %}
+                      <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+                  {% endfor %}
+              </div>
+          {% endfor %}
+          <div class="flex justify-center mt-6">
+              <button type="submit" class="bg-[#968864] text-white font-semibold px-6 py-3 rounded-lg hover:bg-indigo-700 transition duration-300 ease-in-out w-full">
+                  Edit Shop Entry
+              </button>
+          </div>
+      </form>
+  </div>
+  </div>
+</div>
+{% endblock %}
+```
 </details>
