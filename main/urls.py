@@ -1,5 +1,5 @@
 from django.urls import path
-from main.views import show_main, create_shop_entry, show_xml, show_json, show_xml_by_id, show_json_by_id
+from main.views import show_main, create_shop_entry, show_xml, show_json, show_xml_by_id, show_json_by_id, add_shop_entry_ajax
 from main.views import register
 from main.views import login_user
 from main.views import logout_user
@@ -20,4 +20,5 @@ urlpatterns = [
     path('logout/', logout_user, name='logout'),
     path('edit-shop/<uuid:id>', edit_shop, name='edit_shop'),
     path('delete/<uuid:id>', delete_shop, name='delete_shop'),
+    path('create-shop-entry-ajax', add_shop_entry_ajax, name='add_shop_entry_ajax'),
 ]

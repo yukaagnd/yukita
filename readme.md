@@ -1189,3 +1189,32 @@ dan memodifikasi `global.css` pada `static/css/global.css`
 {% endblock %}
 ```
 </details>
+
+
+
+<details>
+<summary> <b> Tugas 6: JavaScript dan AJAX </b> </summary>
+
+## **Jawaban Tugas 6**
+
+* ### Jelaskan manfaat dari penggunaan JavaScript dalam pengembangan aplikasi web!
+
+JavaScript memungkinkan pengembangan aplikasi web yang interaktif, dinamis, dan responsif dengan memanipulasi elemen halaman (DOM) secara real-time serta mendukung pemrograman asynchronous, sehingga pengguna dapat berinteraksi tanpa harus memuat ulang halaman. Dengan ekosistem yang kuat dan kompatibilitas di semua browser modern, JavaScript juga mempermudah pengembangan fitur-fitur canggih seperti animasi, validasi formulir, dan integrasi dengan API, menjadikannya salah satu bahasa inti dalam pengembangan web.
+
+* ### Jelaskan fungsi dari penggunaan `await` ketika kita menggunakan `fetch()`! Apa yang akan terjadi jika kita tidak menggunakan await?
+
+`await` digunakan bersama `fetch()` untuk menunggu hingga Promise yang dihasilkan `fetch()` selesai dan mengembalikan hasil sebelum melanjutkan eksekusi kode. Ini memastikan data dari server sudah diterima dan siap digunakan. Jika `await` tidak digunakan, eksekusi kode berikutnya akan berjalan meskipun respons dari server belum diterima, yang bisa menyebabkan error ketika data belum siap untuk diakses atau diproses.
+
+* ### Mengapa kita perlu menggunakan decorator `csrf_exempt` pada view yang akan digunakan untuk AJAX POST?
+
+Decorator `csrf_exempt` digunakan untuk menonaktifkan pemeriksaan CSRF pada view tertentu yang menerima AJAX POST request. Hal ini diperlukan karena permintaan AJAX terkadang tidak secara otomatis mengirimkan token CSRF, yang dapat menyebabkan kegagalan validasi permintaan POST. Dengan menggunakan `csrf_exempt`, kita bisa menghindari kegagalan permintaan tanpa harus menangani pengiriman token CSRF secara manual dari frontend.
+
+* ### Pada tutorial PBP minggu ini, pembersihan data input pengguna dilakukan di belakang (backend) juga. Mengapa hal tersebut tidak dilakukan di frontend saja?
+
+Pembersihan data input pengguna di backend lebih aman karena melindungi aplikasi dari serangan berbahaya seperti SQL Injection dan XSS, memastikan bahwa semua data yang diproses oleh server sudah tervalidasi. Meski pembersihan di frontend dapat mengurangi beban kerja, data yang dikirim dari klien masih bisa dimanipulasi oleh pengguna, sehingga validasi dan pembersihan di backend menjadi langkah krusial untuk menjaga integritas dan keamanan aplikasi.
+
+## **Implementasi Checklist**
+
+
+
+</details>
