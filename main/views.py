@@ -110,9 +110,7 @@ def edit_shop(request, id):
     return render(request, "edit_shop.html", context)
 
 def delete_shop(request, id):
-    # Get mood berdasarkan id
     shop = ShopEntry.objects.get(pk = id)
-    # Hapus mood
     shop.delete()
     # Kembali ke halaman awal
     return HttpResponseRedirect(reverse('main:show_main'))
@@ -127,7 +125,7 @@ def add_shop_entry_ajax(request):
     description = strip_tags(request.POST.get("description"))
     user = request.user
 
-    new_mood = MoodEntry(
+    new_shop = ShopEntry(
         product_name=product_name, price=price, quantity=quantity, location=location, description=description,
         user=user
     )
