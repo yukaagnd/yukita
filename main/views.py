@@ -16,6 +16,10 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.utils.html import strip_tags
 
+from django.views.decorators.csrf import csrf_exempt
+import json
+from django.http import JsonResponse
+
 @login_required(login_url='/login')
 def show_main(request):
 
@@ -50,7 +54,7 @@ def show_xml(request):
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
 
 def show_json(request):
-    data = ShopEntry.objects.filter(user=request.user)
+    data = ShopEntry.objects.all()
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 def show_xml_by_id(request, id):
@@ -132,3 +136,24 @@ def add_shop_entry_ajax(request):
     new_shop.save()
 
     return HttpResponse(b"CREATED", status=201)
+
+
+@csrf_exempt
+def create_shop_flutter(request):
+    if request.method == 'POST':
+
+        data = json.loads(request.body)
+        new_shop = ShopEntry.objects.create(
+            user=request.user,
+            product_name=data["product_name"],
+            price=int(data["price"]),
+            quantity=int(data["quantity"]),
+            location=data["location"],
+            description=data["description"],
+        )
+
+        new_shop.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
